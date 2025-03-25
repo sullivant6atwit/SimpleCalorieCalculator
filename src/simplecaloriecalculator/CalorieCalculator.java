@@ -8,39 +8,46 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.ArrayList;
 
 public class CalorieCalculator extends Application {
-    private double totalCalories = 0;
+    // Stores calorie entries
+    private ArrayList<Double> calorieEntries = new ArrayList<>();
+    
+    // UI components
     private Label resultLabel;
     private TextField calorieInput;
 
     @Override
     public void start(Stage primaryStage) {
-        // Create input field
+        // Initialize calorie input field
         calorieInput = new TextField();
         calorieInput.setPromptText("Enter calories");
 
-        // Create add button
+        // Create add calories button
         Button addButton = new Button("Add Calories");
-        addButton.setOnAction(e -> addCalories());
+        addButton.setOnAction(event -> addCalories());
 
-        // Create result label
+        // Create reset tracker button
+        Button resetButton = new Button("Reset Tracker");
+        resetButton.setOnAction(event -> resetTracker());
+
+        // Initialize result label
         resultLabel = new Label("Total Calories: 0");
 
-        // Create layout
+        // Create layout and add components
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
         layout.getChildren().addAll(
-            new Label("Calorie Calculator"),
+            new Label("Calorie Tracker"),
             calorieInput, 
             addButton, 
+            resetButton,
             resultLabel
         );
 
-        // Create scene
-        Scene scene = new Scene(layout, 250, 250);
-
-        // Set up stage
+        // Set up and show the stage
+        Scene scene = new Scene(layout, 250, 300);
         primaryStage.setTitle("Calorie Tracker");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -48,21 +55,38 @@ public class CalorieCalculator extends Application {
 
     private void addCalories() {
         try {
-            // calories from input
+            // Parse input calories
             double calories = Double.parseDouble(calorieInput.getText());
             
-            // Add to total calories
-            totalCalories += calories;
+            // Add to entries list
+            calorieEntries.add(calories);
             
-            // Update
-            resultLabel.setText("Total Calories: " + totalCalories);
+            // Update total calories display
+            updateTotalCalories();
             
-            // Clear input
+            // Clear input field
             calorieInput.clear();
         } catch (NumberFormatException e) {
-            // invalid input
+            // Handle invalid input
             resultLabel.setText("Please enter a valid number");
         }
+    }
+
+    private void resetTracker() {
+        // Clear all calorie entries
+        calorieEntries.clear();
+        updateTotalCalories();
+    }
+
+    private void updateTotalCalories() {
+        // Calculate total calories
+        double total = 0;
+        for (Double calories : calorieEntries) {
+            total += calories;
+        }
+        
+        // Update result label with formatted total
+        resultLabel.setText(String.format("Total Calories: %.2f", total));
     }
 
     public static void main(String[] args) {
