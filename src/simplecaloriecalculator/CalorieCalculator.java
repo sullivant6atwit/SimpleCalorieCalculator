@@ -225,9 +225,9 @@ public class CalorieCalculator extends Application {
     			// Calls different constructor depending if
     			// the name field is filled in
     			if (nameFoodInput.getText().isEmpty()) {
-    				f = new Food(calories, 5);
+    				f = new Food(calories);
     			} else {
-    				f = new Food(nameFoodInput.getText(), calories, 5);
+    				f = new Food(nameFoodInput.getText(), calories);
     			}
     			
     			// Give protein values to food if provided and greater than zero
